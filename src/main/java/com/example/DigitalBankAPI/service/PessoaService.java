@@ -1,12 +1,14 @@
 package com.example.DigitalBankAPI.service;
 
+import com.example.DigitalBankAPI.model.NovaProposta;
 import com.example.DigitalBankAPI.model.Pessoa;
 import com.example.DigitalBankAPI.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.ArrayList;
+import javax.validation.Valid;
 import java.util.Optional;
 
 @Service
@@ -17,16 +19,6 @@ public class PessoaService {
         public PessoaService(PessoaRepository pessoaRepository){
         this.pessoaRepository = pessoaRepository;
     }
-
-//    public boolean findEmail(String email){
-//        final Optional<Pessoa> pessoaOptional = pessoaRepository.findbyEmail(email);
-//
-//        if(pessoaOptional.isPresent()){
-//            return true; //Existe
-//        } else {
-//            return false; //Não existe
-//        }
-//    }
 
     //consulta
     public Pessoa findById(long id){
@@ -39,20 +31,14 @@ public class PessoaService {
     }
 
     //insert
-    public Pessoa create(@RequestBody Pessoa pessoa) {
-//        final boolean validaEmail = this.findEmail(pessoa.getEmail());
-//
-//        if (!validaEmail) {
-//            return pessoaRepository.save(pessoa);
-//        } else {
-//            throw new RuntimeException(String.format("Email já cadastrado!"));
-//        }
+    public Pessoa create(@RequestBody @Valid NovaProposta novaProposta, UriComponentsBuilder uriComponentsBuilder) {
+        final Pessoa pessoa = novaProposta.toModel();
         return pessoaRepository.save(pessoa);
     }
     //update
-    public Pessoa update(@RequestBody Pessoa pessoa){
-        return pessoaRepository.save(pessoa);
-    }
+//    public Pessoa update(@RequestBody Pessoa pessoa){
+//        return pessoaRepository.save(pessoa);
+//    }
     //delete
-    public void delete(@RequestBody Pessoa pessoa){pessoaRepository.deleteById(pessoa.getId());}
+//    public void delete(@RequestBody Pessoa pessoa){pessoaRepository.deleteById(pessoa.getId());}
 }
