@@ -1,35 +1,30 @@
 package com.example.DigitalBankAPI.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 
-@Entity
-public class Endereco {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class NovaPropostaParte2 {
+    @NotBlank
     private String cep;
+    @NotBlank
     private String rua;
+    @NotBlank
     private String bairro;
+    @NotBlank
     private String complemento;
+    @NotBlank
     private String cidade;
+    @NotBlank
     private String estado;
 
-    protected Endereco(){}
+    protected NovaPropostaParte2(){}
 
-    public Endereco(String cep, String rua, String bairro, String complemento, String cidade, String estado) {
+    public NovaPropostaParte2(@NotBlank String cep, @NotBlank String rua, @NotBlank String bairro, @NotBlank String complemento, @NotBlank String cidade, @NotBlank String estado) {
         this.cep = cep;
         this.rua = rua;
         this.bairro = bairro;
         this.complemento = complemento;
         this.cidade = cidade;
         this.estado = estado;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getCep() {
@@ -54,5 +49,9 @@ public class Endereco {
 
     public String getEstado() {
         return estado;
+    }
+
+    public Endereco toModel(){
+        return new Endereco(cep, rua, bairro, complemento, cidade, estado);
     }
 }

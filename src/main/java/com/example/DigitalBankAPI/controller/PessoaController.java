@@ -11,6 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/api/proposta")
@@ -23,7 +24,7 @@ public class PessoaController {
     @PostMapping
     public ResponseEntity savePessoa(@RequestBody @Valid NovaProposta novaProposta, UriComponentsBuilder uriComponentsBuilder){
 
-        final Pessoa pessoa = pessoaService.create(novaProposta, uriComponentsBuilder);
+        final Pessoa pessoa = pessoaService.create(novaProposta);
 
         final URI uri = uriComponentsBuilder.path("/api/proposta/{id}/etapa2").buildAndExpand(pessoa.getId()).toUri();
         return ResponseEntity.created(uri).build();
@@ -37,7 +38,8 @@ public class PessoaController {
 
     @GetMapping(path = "/{id}")
     public Pessoa findPessoa(@PathVariable long id){
-        return pessoaService.findById(id);
+        Optional<Pessoa> pessoa = pessoaService.findById(id);
+        return pessoa.get();
     }
 
 //    @DeleteMapping
