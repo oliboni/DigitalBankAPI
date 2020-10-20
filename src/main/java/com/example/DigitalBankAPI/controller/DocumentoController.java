@@ -1,12 +1,11 @@
 package com.example.DigitalBankAPI.controller;
 
-
 import com.example.DigitalBankAPI.exceptions.BadRequestException;
 import com.example.DigitalBankAPI.exceptions.IllegalRequestException;
 import com.example.DigitalBankAPI.exceptions.NotFoundRequestException;
-import com.example.DigitalBankAPI.model.Endereco;
-import com.example.DigitalBankAPI.model.NovaPropostaEndereco;
-import com.example.DigitalBankAPI.service.EnderecoService;
+import com.example.DigitalBankAPI.model.Documento;
+import com.example.DigitalBankAPI.model.NovaPropostaDocumento;
+import com.example.DigitalBankAPI.service.DocumentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,15 +14,15 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/api/proposta/{id}/etapa2")
-public class EnderecoController {
-
+@RequestMapping(value = "/api/proposta/{id}/etapa3")
+public class DocumentoController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationException(MethodArgumentNotValidException e){
@@ -38,7 +37,7 @@ public class EnderecoController {
     }
 
     @Autowired
-    EnderecoService enderecoService;
+    DocumentoService documentoService;
     @Autowired
     BadRequestException badRequestException;
     @Autowired
@@ -47,20 +46,20 @@ public class EnderecoController {
     IllegalRequestException illegalRequestException;
 
     @PostMapping
-    public ResponseEntity saveEndereco(@RequestBody @Valid NovaPropostaEndereco novaPropostaEndereco
+    @Transactional
+    public ResponseEntity saveDocument(@RequestBody @Valid NovaPropostaDocumento novaPropostaDocumento
                                      , @PathVariable("id") Long id
                                      , UriComponentsBuilder uriComponentsBuilder){
         try {
-            final Endereco endereco = enderecoService.create(novaPropostaEndereco, id);
-
-            if (endereco != null) {
-                final URI uri = uriComponentsBuilder.path("/api/proposta/{id}/etapa3").buildAndExpand(id).toUri();
+            final Documento documento = documentoService.create(novaPropostaDocumento, id);
+            if (documento != null) {
+                final URI uri = uriComponentsBuilder.path("/api/proposta/{id}/").buildAndExpand(id).toUri();
                 return ResponseEntity.created(uri).build();
             }
-             return ResponseEntity.notFound().build();
-        }catch (IllegalArgumentException e){
+            return ResponseEntity.notFound().build();
+        }catch (IllegalArgumentException e) {
             return illegalRequestException.illegalArgument(e);
-        } catch (IllegalStateException e) {
+        }catch (IllegalStateException e){
             return illegalRequestException.illegalState(e);
         }catch (RuntimeException e){
             return notFoundRequestException.notFound(e);
@@ -68,19 +67,4 @@ public class EnderecoController {
             return badRequestException.badRequest(e);
         }
     }
-
-//    @PutMapping
-//    public Endereco updateEndereco(@RequestBody Endereco endereco){
-//        return enderecoService.update(endereco);
-//    }
-
-    @GetMapping(path = "/{id}")
-    public Endereco findEndereco(@PathVariable long id){
-        return enderecoService.findById(id);
-    }
-
-//    @DeleteMapping
-//    public void deleteEndereco(@RequestBody Endereco endereco){
-//        enderecoService.delete(endereco);
-//    }
 }

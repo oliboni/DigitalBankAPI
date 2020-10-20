@@ -1,8 +1,6 @@
 package com.example.DigitalBankAPI.service.validators;
 
 
-import org.springframework.util.Assert;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -28,7 +26,6 @@ public class UniqueValueValidator implements ConstraintValidator<UniqueValue, Ob
         Query query = manager.createQuery("select 1 from " + klass.getName() + " where " + domainAttribute + "=:value");
         query.setParameter("value", value);
         List<?> list = query.getResultList();
-        Assert.state(list.size() <= 1, "Já existe um " + klass + " com o atributo " + "=" + value + " cadastrado no sitema!");
 
         return list.isEmpty();
     }

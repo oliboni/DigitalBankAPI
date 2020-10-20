@@ -25,7 +25,7 @@ public class PessoaService {
         if (pessoaOpcional.isPresent()){
             return pessoaOpcional;
         } else {
-            throw new RuntimeException(String.format("Pessoa id {%s} não encontrada no banco de dados", id));
+            throw new RuntimeException(String.format("Pessoa não encontrada no banco de dados"));
         }
     }
 
@@ -40,7 +40,7 @@ public class PessoaService {
         return pessoaRepository.save(pessoa);
     }
     //delete
-//    public void delete(@RequestBody Pessoa pessoa){
-//        pessoaRepository.deleteById(pessoa.getId());
-//    }
+    public void delete(@RequestBody Pessoa pessoa){
+        pessoaRepository.deleteById(pessoa.getId());
+    }
 }

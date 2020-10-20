@@ -17,15 +17,15 @@ public class NovaProposta {
     private String sobrenome;
     @NotNull
     @CPF
-    @UniqueValue(domainClass = Pessoa.class, fieldName = "cpf")
+    @UniqueValue(domainClass = Pessoa.class, fieldName = "cpf", message = "Este CPF já está sendo usado!")
     private String cpf;
     @NotBlank
     @Email
-    @UniqueValue(domainClass = Pessoa.class, fieldName = "email")
+    @UniqueValue(domainClass = Pessoa.class, fieldName = "email", message = "Este Email já está sendo usado!")
     private String email;
     @Past
     @NotNull
-    @BeforeDate(years = 18)
+    @BeforeDate(years = 18, message = "A idade deve ser maior que 18 anos!")
     private LocalDate dataNascimento;
 
     public NovaProposta(@NotBlank String nome, @NotBlank String sobrenome, @NotNull @CPF String cpf, @NotBlank @Email String email, @Past @NotNull LocalDate dataNascimento) {

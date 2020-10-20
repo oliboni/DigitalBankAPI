@@ -24,7 +24,8 @@ public class Pessoa {
     private LocalDate dataNascimento;
     @OneToOne(cascade = CascadeType.MERGE)
     private Endereco endereco;
-
+    @OneToOne(cascade = CascadeType.MERGE)
+    private Documento documento;
 
     protected Pessoa() {
     }
@@ -41,13 +42,46 @@ public class Pessoa {
         return id;
     }
 
+    public String getNome() {
+        return nome;
+    }
+
+    public String getSobrenome() {
+        return sobrenome;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public Documento getDocumento() {
+        return documento;
+    }
 
     public void adicionaEndereco(Endereco novoEndereco){
         Assert.isNull(this.endereco, "Já existe um endereço cadastrado");
         this.endereco = novoEndereco;
     }
 
-    public Endereco getEndereco() {
-        return endereco;
+    public void adicionaDocumento(Documento documento) {
+        Assert.state(this.endereco != null , "O endereço não pode ser nulo");
+        Assert.isNull(this.documento, "Já existe um documento cadastrado");
+        this.documento = documento;
+    }
+
+    public boolean cadastroCompleto(){
+        return this.endereco != null && this.documento != null;
     }
 }

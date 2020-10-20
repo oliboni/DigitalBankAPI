@@ -1,9 +1,13 @@
 package com.example.DigitalBankAPI.model;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
-public class NovaPropostaParte2 {
-    @NotBlank
+public class NovaPropostaEndereco {
+    @NotBlank(message = "CEP inválido")
+    @Pattern(regexp = "\\d{5}\\-\\d{3}", message = "CEP deve ser no formato 00000-000")
+    @Size(min = 8, max = 9, message = "CEP inválido")
     private String cep;
     @NotBlank
     private String rua;
@@ -16,9 +20,9 @@ public class NovaPropostaParte2 {
     @NotBlank
     private String estado;
 
-    protected NovaPropostaParte2(){}
+    protected NovaPropostaEndereco(){}
 
-    public NovaPropostaParte2(@NotBlank String cep, @NotBlank String rua, @NotBlank String bairro, @NotBlank String complemento, @NotBlank String cidade, @NotBlank String estado) {
+    public NovaPropostaEndereco(@NotBlank String cep, @NotBlank String rua, @NotBlank String bairro, @NotBlank String complemento, @NotBlank String cidade, @NotBlank String estado) {
         this.cep = cep;
         this.rua = rua;
         this.bairro = bairro;

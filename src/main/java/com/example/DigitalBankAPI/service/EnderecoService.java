@@ -1,7 +1,7 @@
 package com.example.DigitalBankAPI.service;
 
 import com.example.DigitalBankAPI.model.Endereco;
-import com.example.DigitalBankAPI.model.NovaPropostaParte2;
+import com.example.DigitalBankAPI.model.NovaPropostaEndereco;
 import com.example.DigitalBankAPI.model.Pessoa;
 import com.example.DigitalBankAPI.repository.EnderecoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +14,9 @@ import java.util.Optional;
 @Service
 public class EnderecoService {
     @Autowired
-    private EnderecoRepository enderecoRepository;
-    @Autowired
     private PessoaService pessoaService ;
-
+    @Autowired
+    private EnderecoRepository enderecoRepository;
     public EnderecoService(EnderecoRepository enderecoRepository){
         this.enderecoRepository = enderecoRepository;
     }
@@ -33,8 +32,8 @@ public class EnderecoService {
     }
 
     //insert
-    public Endereco create(@RequestBody @Valid NovaPropostaParte2 novaPropostaParte2, Long id) {
-        Endereco endereco = novaPropostaParte2.toModel();
+    public Endereco create(@RequestBody @Valid NovaPropostaEndereco novaPropostaEndereco, Long id) {
+        Endereco endereco = novaPropostaEndereco.toModel();
         Optional<Pessoa> optionalPessoa = pessoaService.findById(id);
         if (optionalPessoa.isPresent()){
             Pessoa pessoa = optionalPessoa.get();
@@ -46,9 +45,9 @@ public class EnderecoService {
         return null;
     }
 //    //update
-//    public Endereco update(@RequestBody Endereco endereco){
-//        return enderecoRepository.save(endereco);
-//    }
+    public Endereco update(@RequestBody Endereco endereco){
+        return enderecoRepository.save(endereco);
+    }
 //    //delete
-//    public void delete(@RequestBody Endereco endereco){enderecoRepository.delete(endereco);}
+    public void delete(@RequestBody Endereco endereco){enderecoRepository.delete(endereco);}
 }
