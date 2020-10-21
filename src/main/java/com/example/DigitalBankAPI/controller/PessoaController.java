@@ -2,6 +2,7 @@ package com.example.DigitalBankAPI.controller;
 
 
 import com.example.DigitalBankAPI.exceptions.BadRequestException;
+import com.example.DigitalBankAPI.exceptions.IllegalRequestException;
 import com.example.DigitalBankAPI.model.NovaProposta;
 import com.example.DigitalBankAPI.model.Pessoa;
 import com.example.DigitalBankAPI.repository.PessoaRepository;
@@ -43,6 +44,8 @@ public class PessoaController {
     PessoaRepository    pessoaRepository;
     @Autowired
     BadRequestException badRequestException;
+    @Autowired
+    IllegalRequestException illegalRequestException;
 
     @PostMapping
     public ResponseEntity<Object> savePessoa(@RequestBody @Valid NovaProposta novaProposta, UriComponentsBuilder uriComponentsBuilder){
@@ -62,9 +65,17 @@ public class PessoaController {
     }
 
     @GetMapping(path = "/{id}")
-    public Pessoa findPessoa(@PathVariable long id){
+    public ResponseEntity<Object> findPessoa(@PathVariable long id){
         Optional<Pessoa> pessoa = pessoaService.findById(id);
-        return pessoa.get();
+        if (pessoa.get().getEndereco() == null){
+            String msg = "As informações do endereço ainda não foram enviadas!";
+            return illegalRequestException.illegalState(msg);
+        }
+        if (pessoa.get().getDocumento() == null) {
+            String msg = "O documento ainda não foi enviado!";
+            return illegalRequestException.illegalState(msg);
+        }
+        return new ResponseEntity<>(pessoa.get(),HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping

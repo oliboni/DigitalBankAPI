@@ -15,6 +15,12 @@ public class IllegalRequestException {
         return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
+    public ResponseEntity<Object> illegalState(String msg){
+        ErrorMessage errorMessage = new ErrorMessage(LocalDate.now(), msg,"Unprocessable Entity",422);
+
+        return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
     public ResponseEntity<Object> illegalArgument(IllegalArgumentException e){
         ErrorMessage errorMessage = new ErrorMessage(LocalDate.now(), e.getMessage(),"Unprocessable Entity",422);
 
